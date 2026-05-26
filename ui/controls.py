@@ -4,6 +4,7 @@ from tkinter import ttk
 import sys
 import sys
 import os
+from unittest import result
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import tkinter as tk
 from tkinter import ttk
@@ -11,8 +12,8 @@ import threading
 import time
 from core.screen_capture import select_screen_area
 from PIL import ImageGrab
-import pytesseract
-import easyocr
+# import pytesseract
+# import easyocr
 import numpy as np
 from paddleocr import PaddleOCR
 class ControlsFrame(tk.Frame):
@@ -113,10 +114,15 @@ class ControlsFrame(tk.Frame):
 
             elif ocr_tool == "paddleocr":
                 if self.paddleocr_reader is None:
-                    self.paddleocr_reader = PaddleOCR(use_angle_cls=True, lang='ch')  # 'ch' includes simplified + English
-                results = self.paddleocr_reader.ocr(np_img, cls=True)
-                text_lines = [line[1][0] for line in results[0]]
+                    self.paddleocr_reader = PaddleOCR(use_textline_orientation=True, lang='ch')  # 'ch' includes simplified + English
+                results = self.paddleocr_reader.predict(np_img)
+                # text_lines = [line[1][0] for line in results[0]]
+                # text = " ".join(text_lines)
+                result = results[0]
+                text_lines = result["rec_texts"]
                 text = " ".join(text_lines)
+
+                print(f"[DEBUG] PaddleOCR raw results: {text}")
 
             else:
                 raise ValueError("Unsupported OCR tool")

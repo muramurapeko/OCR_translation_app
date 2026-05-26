@@ -3,7 +3,7 @@ import time
 from ui.controls import ControlsFrame
 from ui.ocr_display import OCRDisplayFrame
 from ui.translation_display import TranslationDisplayFrame
-from core.translator4 import translate_text
+from core.translator3 import translate_text
 
 class OCRTranslationApp(tk.Tk):
     def __init__(self):
